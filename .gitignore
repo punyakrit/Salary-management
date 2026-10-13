@@ -1,0 +1,23 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# next
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# prisma generated client (regenerated on install)
+src/server/generated/
+
+# env — commit .env.example only
+.env
+.env*.local
+
+# misc
+.DS_Store
+coverage/
+*.log
+.vercel
