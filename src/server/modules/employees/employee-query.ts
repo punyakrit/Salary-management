@@ -7,7 +7,7 @@ const MAX_SEARCH_TERMS = 5;
 /**
  * Translates directory filters into a Prisma `where`. Pure, so it's unit-tested
  * without a database. Every search term must match at least one field, which
- * makes "ada love" find Ada Lovelace (ADR-0004).
+ * makes "ada love" find Ada Lovelace (docs/02-architecture.md, Key decisions).
  */
 export function buildEmployeeWhere(
   query: Pick<ListEmployeesQuery, 'search' | 'country' | 'departmentId' | 'jobTitle'>,

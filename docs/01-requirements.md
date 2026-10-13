@@ -24,15 +24,16 @@ Replace the spreadsheets ACME's HR team uses for 10,000 employees across multipl
 1. **Employee directory** — server-side pagination, search (name / email / employee code), filters (country, department, job title), sorting.
 2. **Employee CRUD** — name, email, job title, department, country, employment type, hire date, annual base salary + currency. Validated with the same schema on the client and the server.
 3. **Salary revisions** — every salary change records previous → new, effective date, and reason.
-4. **Insights** — org headcount, total annual payroll (USD), median salary; per-country and per-department min / max / avg / median; per-job-title stats within a country; salary distribution.
+4. **Insights** — org headcount, total annual payroll (USD), median salary; per-country and per-department min / max / avg / median; per-job-title stats within a country; salary distribution (histogram with the middle half shaded). Each view states its takeaway in one plain sentence.
 5. **Seed script** — 10,000 realistic, *deterministic* employees (same seed → same data) across ~10 countries.
-6. **Deployed app + demo video.**
+6. **Sign-in (Clerk)** — every page and every Server Action requires a session. One role: anyone signed in is an HR Manager.
+7. **Deployed app + demo video.**
 
 ## Deliberately out of scope (and why)
 
 | Left out | Reasoning |
 |---|---|
-| Authentication / roles | One trusted persona; auth is a well-known, separable layer (e.g. Clerk/Auth.js in front of the app). The deployed demo uses synthetic data only. **First item post-v1.** |
+| Roles, permissions, restricted sign-up | One persona, so one role. Open sign-up is fine for a demo on synthetic data; production would add Clerk Organizations with roles and invite-only sign-up. |
 | Payroll processing (tax, deductions, payslips, payouts) | A different domain with country-specific law. v1 is the *system of record for compensation*, not a payroll engine. |
 | Bonus, equity, allowances | Base salary answers the stated questions. The revision model extends to compensation components later. |
 | Live FX rates | Static, dated rates in a table keep analytics reproducible and testable with no third-party dependency. Rates show an "as of" date. |

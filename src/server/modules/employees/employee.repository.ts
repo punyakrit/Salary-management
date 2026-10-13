@@ -31,7 +31,7 @@ export interface EmployeePage {
 
 /**
  * Persistence port for employees. Implemented by Prisma in production and by an
- * in-memory fake in unit tests (ADR-0002).
+ * in-memory fake in unit tests (docs/02-architecture.md, Key decisions).
  */
 export interface EmployeeRepository {
   list(query: ListEmployeesQuery): Promise<EmployeePage>;

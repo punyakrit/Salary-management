@@ -10,7 +10,7 @@ import { createPrismaReferenceRepository } from './modules/reference/reference.p
 /**
  * Composition root: the only place that knows which concrete repositories back
  * the services. Pages and Server Actions import from here; tests build services
- * with in-memory fakes instead (ADR-0002).
+ * with in-memory fakes instead (docs/02-architecture.md, Key decisions).
  */
 const reference = createPrismaReferenceRepository(db);
 

@@ -22,3 +22,5 @@ src/server/generated/
 coverage/
 *.log
 .vercel
+.env*
+!.env.example
