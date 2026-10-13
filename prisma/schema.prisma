@@ -1,0 +1,95 @@
+// Data model rationale, including money and currency: docs/03-data-model.md
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/server/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
+model Country {
+  /// ISO 3166-1 alpha-2
+  code      String     @id @db.Char(2)
+  name      String     @unique
+  /// ISO 4217 default pay currency for this country
+  currency  String     @db.Char(3)
+  employees Employee[]
+
+  @@map("countries")
+}
+
+model Department {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+
+  @@map("departments")
+}
+
+/// Static, dated FX rates. USD is the reporting currency.
+model ExchangeRate {
+  currency  String     @id @db.Char(3)
+  /// 1 unit of `currency` = usdRate USD
+  usdRate   Decimal    @map("usd_rate") @db.Decimal(18, 8)
+  asOf      DateTime   @map("as_of") @db.Date
+  employees Employee[]
+
+  @@map("exchange_rates")
+}
+
+model Employee {
+  id             String         @id @default(uuid()) @db.Uuid
+  /// Sequential number shown to humans as "EMP-000123" (see employee-code.ts)
+  employeeNumber Int            @unique @default(autoincrement()) @map("employee_number")
+  firstName      String         @map("first_name")
+  lastName       String         @map("last_name")
+  email          String         @unique
+  jobTitle       String         @map("job_title")
+  departmentId   Int            @map("department_id")
+  countryCode    String         @map("country_code") @db.Char(2)
+  employmentType EmploymentType @default(FULL_TIME) @map("employment_type")
+  hireDate       DateTime       @map("hire_date") @db.Date
+  /// Annual gross base salary in `currency`
+  salary         Decimal        @db.Decimal(14, 2)
+  currency       String         @db.Char(3)
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  department      Department       @relation(fields: [departmentId], references: [id])
+  country         Country          @relation(fields: [countryCode], references: [code])
+  exchangeRate    ExchangeRate     @relation(fields: [currency], references: [currency])
+  salaryRevisions SalaryRevision[]
+
+  @@index([countryCode, jobTitle])
+  @@index([departmentId])
+  @@index([lastName, firstName])
+  @@map("employees")
+}
+
+/// Append-only salary history, written in the same transaction as the salary change.
+model SalaryRevision {
+  id               String   @id @default(uuid()) @db.Uuid
+  employeeId       String   @map("employee_id") @db.Uuid
+  /// Null for the initial salary
+  previousSalary   Decimal? @map("previous_salary") @db.Decimal(14, 2)
+  /// Differs from `currency` only when a change also moved the employee to a new pay currency
+  previousCurrency String?  @map("previous_currency") @db.Char(3)
+  newSalary        Decimal  @map("new_salary") @db.Decimal(14, 2)
+  currency         String   @db.Char(3)
+  reason           String?
+  effectiveDate    DateTime @map("effective_date") @db.Date
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId, effectiveDate(sort: Desc)])
+  @@map("salary_revisions")
+}
