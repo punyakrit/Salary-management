@@ -1,6 +1,6 @@
 # Requirements — ACME Salary Management (v1)
 
-> One-page scope document, written before any code. Decisions referenced here are expanded in [`docs/adr/`](./adr).
+> One-page scope document, written before any code. Technical decisions live in [architecture](./02-architecture.md#key-decisions).
 
 ## Goal
 
@@ -32,7 +32,7 @@ Replace the spreadsheets ACME's HR team uses for 10,000 employees across multipl
 
 | Left out | Reasoning |
 |---|---|
-| Authentication / roles | One trusted persona; auth is a well-known, separable layer (e.g. Clerk/Auth.js in front of the API). The deployed demo uses synthetic data only. **First item post-v1.** |
+| Authentication / roles | One trusted persona; auth is a well-known, separable layer (e.g. Clerk/Auth.js in front of the app). The deployed demo uses synthetic data only. **First item post-v1.** |
 | Payroll processing (tax, deductions, payslips, payouts) | A different domain with country-specific law. v1 is the *system of record for compensation*, not a payroll engine. |
 | Bonus, equity, allowances | Base salary answers the stated questions. The revision model extends to compensation components later. |
 | Live FX rates | Static, dated rates in a table keep analytics reproducible and testable with no third-party dependency. Rates show an "as of" date. |
@@ -43,12 +43,12 @@ Replace the spreadsheets ACME's HR team uses for 10,000 employees across multipl
 
 ## Non-functional targets
 
-- Directory query (page of 25 over 10k rows, filtered + sorted): **< 300 ms p95** at the API.
+- Directory query (page of 25 over 10k rows, filtered + sorted): **< 300 ms p95** server-side.
 - Insights queries: **< 500 ms** without caching.
 - Seed 10k employees: **< 30 s** against Neon.
 - Unit-test suite: **< 10 s**, no network, no database, deterministic.
-- Money is never stored as floating point (see [ADR-0003](./adr/0003-money-and-currency.md)).
+- Money is never stored as floating point (see [data model](./03-data-model.md)).
 
 ## Success looks like
 
-The HR Manager can answer J1–J6 without leaving the app, and a reviewer can trace each decision from this page → ADR → code → test.
+The HR Manager can answer J1–J6 without leaving the app, and a reviewer can trace each decision from this page → architecture → code → test.
