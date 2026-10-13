@@ -1,0 +1,189 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@clerk/ui/themes/shadcn.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+  --color-pay: var(--pay);
+  --color-pay-band: var(--pay-band);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/*
+ * Entrance motion is CSS, not JS: content is painted at its final size and
+ * animates on first paint, so nothing is hidden while the page hydrates.
+ * Framer Motion is reserved for interaction (toggles, reflow, cross-fades).
+ */
+@theme {
+  --animate-grow-x: grow-x 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-up: fade-up 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-from: slide-from 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  /* Slides an absolutely-positioned marker in from `--slide-from` (a left %). */
+  @keyframes slide-from {
+    from {
+      left: var(--slide-from);
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-grow-x,
+  .animate-fade-up,
+  .animate-slide-from {
+    animation: none;
+  }
+}
+
+/*
+ * "Ledger" palette — ink navy on white, banknote green for pay data.
+ * The app is light-only (forcedTheme="light"); .dark tokens are kept for a future toggle.
+ * Chart greens validated for lightness/chroma/contrast (dataviz validator):
+ * light #16855A on paper, dark #2A9D6C on ink.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #1b2a41;
+  --card: #ffffff;
+  --card-foreground: #1b2a41;
+  --popover: #ffffff;
+  --popover-foreground: #1b2a41;
+  --primary: #1b2a41;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f5f8;
+  --secondary-foreground: #1b2a41;
+  --muted: #f3f5f8;
+  --muted-foreground: #5b6b80;
+  --accent: #f1f4f8;
+  --accent-foreground: #1b2a41;
+  --destructive: #b42318;
+  --border: #e2e7ee;
+  --input: #e2e7ee;
+  --ring: #6b84a6;
+  --pay: #16855a;
+  --pay-band: color-mix(in oklab, var(--pay) 22%, transparent);
+  --chart-1: var(--pay);
+  --chart-2: #1b2a41;
+  --chart-3: #6b84a6;
+  --chart-4: #9fb0c6;
+  --chart-5: #c9d4e3;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1b2a41;
+  --sidebar-primary: #1b2a41;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f4f8;
+  --sidebar-accent-foreground: #1b2a41;
+  --sidebar-border: #e2e7ee;
+  --sidebar-ring: #6b84a6;
+}
+
+.dark {
+  --background: #0f1724;
+  --foreground: #e6ecf3;
+  --card: #151f2e;
+  --card-foreground: #e6ecf3;
+  --popover: #151f2e;
+  --popover-foreground: #e6ecf3;
+  --primary: #e6ecf3;
+  --primary-foreground: #0f1724;
+  --secondary: #1d2939;
+  --secondary-foreground: #e6ecf3;
+  --muted: #1d2939;
+  --muted-foreground: #94a3b8;
+  --accent: #22304a;
+  --accent-foreground: #e6ecf3;
+  --destructive: #f04438;
+  --border: #26344a;
+  --input: #2d3d55;
+  --ring: #6b84a6;
+  --pay: #2a9d6c;
+  --pay-band: color-mix(in oklab, var(--pay) 28%, transparent);
+  --chart-1: var(--pay);
+  --chart-2: #e6ecf3;
+  --chart-3: #6b84a6;
+  --chart-4: #4a5d78;
+  --chart-5: #2d3d55;
+  --sidebar: #121b29;
+  --sidebar-foreground: #e6ecf3;
+  --sidebar-primary: #e6ecf3;
+  --sidebar-primary-foreground: #0f1724;
+  --sidebar-accent: #1d2939;
+  --sidebar-accent-foreground: #e6ecf3;
+  --sidebar-border: #26344a;
+  --sidebar-ring: #6b84a6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Figures line up in columns, like a ledger. */
+  table,
+  .figures {
+    font-variant-numeric: tabular-nums;
+  }
+}
