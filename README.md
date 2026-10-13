@@ -2,6 +2,8 @@
 
 Web app for an HR Manager to manage salaries for 10,000 employees across 10 countries, and to answer *"how does the org pay people?"*.
 
+**Live:** https://salary-management-sable.vercel.app (create an account to sign in; synthetic data)
+
 **Stack:** Next.js 16 (App Router, Server Components, Server Actions) · shadcn/ui · Clerk · Prisma 7 · Neon Postgres · Vitest
 
 | Doc | |

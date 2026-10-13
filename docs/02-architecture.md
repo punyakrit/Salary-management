@@ -86,5 +86,5 @@ prisma/                schema · migrations · deterministic seed
 | | |
 |---|---|
 | Database | Neon Postgres: `pnpm db:deploy` applies migrations, `pnpm db:seed` loads 10k employees |
-| App | Vercel (region `sin1`): set `DATABASE_URL` (pooled), `DIRECT_URL` (direct) and the Clerk keys |
+| App | Vercel (region `sin1`), deployed on every push to `main`: [salary-management-sable.vercel.app](https://salary-management-sable.vercel.app). Needs `DATABASE_URL` (pooled) and the Clerk keys; `DIRECT_URL` is only for migrations and the seed, run locally |
 | Auth | Clerk: development instance now; create a production instance and add the deployed domain before launch |
